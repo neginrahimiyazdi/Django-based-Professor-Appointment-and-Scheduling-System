@@ -14,6 +14,7 @@ def register(request):
             password = form.cleaned_data.get('password1')
             mh = authenticate( email, password)
             login(request,mh)
+            
             messages.success(request, f'Account created for prof, with email: {email} adress! ')
             return redirect('check_timetaible')
     else:
