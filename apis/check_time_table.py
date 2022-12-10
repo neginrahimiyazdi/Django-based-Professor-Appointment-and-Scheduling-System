@@ -1,6 +1,6 @@
 import json
 
-def show_mh_day_meetings(mh_id): #remove * from meetings where mh_id={} and date={}
+def show_mh_day_meetings(mh_id):
     pass #zahra side
     
 
