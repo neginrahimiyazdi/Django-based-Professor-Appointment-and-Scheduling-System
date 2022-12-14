@@ -16,6 +16,17 @@
 from django.contrib.auth import views as auth_views
 import json
 
+
+# Database side
+def get_password(username:'str'):
+    # Send username to database
+    if (user_not_found_in_database):
+        return 'username not found!'
+        #It could be a good idea to redirect register 
+    else:
+        return password
+
+
 input = '''{ 
     "username":"abolfazlansari@aut.ac.ir",
     "password":"Icannontsharemypass",
@@ -36,20 +47,13 @@ input = '''{
 # The process of checking username and password
 # get Pass from database
 
-def get_password(username:'str') -> 'str':
-    # Send username to database
-    if (user_not_found_in_database):
-        return 'username not found!'
-        #It could be a good idea to redirect register 
+
+def login(username: 'str', password: 'str'):
+
+    database_password = get_password(username)
+
+    if database_passowrd == password:
+        return 'is_successful'
     else:
-        return password
-
-
-database_password = get_password(username)
-
-
-if database_passowrd == password:
-    print("Login sucessfully.")
-else:
-    print("Username or Password is incorrect.")
+        return 'error_string'
 
