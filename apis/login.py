@@ -13,18 +13,17 @@
 # Note: We need log out too, because of security problem!
 # When you login the user can access admin!
 
-from django.contrib.auth import views as auth_views
 import json
 
+def check_user_id(username):
+    # Database side
+    # if user not exist return proper action
+    pass
 
-# Database side
-def get_password(username:'str'):
-    # Send username to database
-    if (user_not_found_in_database):
-        return 'username not found!'
-        #It could be a good idea to redirect register 
-    else:
-        return password
+def check_password(username, password):
+    # Database side
+    # if user password was wrong return proper action
+    pass
 
 
 input = '''{ 
@@ -32,28 +31,29 @@ input = '''{
     "password":"Icannontsharemypass",
         }'''
 
-# def is_student(username, password): -> it breaks to get_password
-    # check this username is valid or not
-    # check the correction of password
-    # zahra side
-    # database side
-    # return 1,0 
-    # pass
 
-# We do not have MH login at this point
+def login(input):
+
+    try:
+        input = json.loads(input)
+        username, password = input['username'], input['password']
+        check_user_id(username)
+        check_password(username, password)
+
+        output = {
+            'is_successful': True,
+            'error_string': '',
+        }
+
+        return json.dumps(output)
+
+    except Exception as e:
+        output = {
+            'is_successful': False, 
+            'error_string': str(e),
+        }
+        return json.dumps(output)
 
 
 
-# The process of checking username and password
-# get Pass from database
-
-
-def login(username: 'str', password: 'str'):
-
-    database_password = get_password(username)
-
-    if database_passowrd == password:
-        return 'is_successful'
-    else:
-        return 'error_string'
 
