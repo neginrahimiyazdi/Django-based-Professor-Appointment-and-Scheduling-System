@@ -1,6 +1,18 @@
 import json
 
-def fill_user_account(user_id, info): 
+def change_info(user_id, info):
+    #database side
+    pass
+
+
+
+input = '''{ 
+    "user_id":"ID",
+    "info": "new information that you want to change" , 
+        }'''
+        
+def fill_user_account(input): 
+
     # edit the accountinformation
     # read the information from user and front
     # change the information in database 
@@ -13,11 +25,27 @@ def fill_user_account(user_id, info):
     # if information are not acceptable : Error
     # else : modified account sucessfuly
 
-    pass
+    try: 
+        input = json.loads(input)
+        user_id, info = input['user_id'], input['info']
+        change_info('user_id', 'info')
+
+        output = {
+            'is_successful': True, 
+            'error_string': '',
+        }
+        
+        return json.dumps(output)
+
+    except Exception as e:
+        output = {
+            'is_successful': False, 
+            'error_string': str(e),
+        }
+        return json.dumps(output)
+        
 
 
 
-input = '''{ 
-    "user_id":"ID",
-    "info": "new information that you want to change" , 
-        }'''
+
+
