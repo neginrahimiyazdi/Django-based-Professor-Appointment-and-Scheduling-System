@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'api.apps.ApiConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,11 +77,11 @@ WSGI_APPLICATION = 'bia2django.wsgi.application'
 DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.postgresql',
-'NAME': 'postgres',
+'NAME': 'testdb',
 'USER': 'root',
-'PASSWORD': 'o9HSiBsc5iCeOo7WGYGurYBu',
+'PASSWORD': 'k6TCXdUCWrXjRyy451fnVWTt',
 'HOST': 'may.iran.liara.ir',
-'PORT': '31860',
+'PORT' : '33613',
 }
 }
 

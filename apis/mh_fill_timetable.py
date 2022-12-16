@@ -26,7 +26,7 @@ def mh_fill_timetable(input):
             for mh_time in day['meetings']:
                 time_id = append_time(day['date'], mh_time['start_time'], mh_time['end_time'])
                 append_mh_time(mh_id, time_id)
-
+            
         output = {
         "is_succesfull": True,
         "error_string": "",
