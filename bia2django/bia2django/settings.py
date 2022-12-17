@@ -77,11 +77,11 @@ WSGI_APPLICATION = 'bia2django.wsgi.application'
 DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.postgresql',
-'NAME': 'database2',
+'NAME': 'database1',
 'USER': 'root',
-'PASSWORD': 'k6TCXdUCWrXjRyy451fnVWTt',
+'PASSWORD': 'lJ07WizcAB2qsuONR6Ow8GFH',
 'HOST': 'may.iran.liara.ir',
-'PORT' : '33613',
+'PORT' : '32352',
 }
 }
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
-from api.main_functions import register_user, register_mh, mh_fill_timetable, login
+from api.main_functions import register_user, register_mh, mh_fill_timetable, login, make_time_id, reserve_meeting
 import json
 
 
@@ -30,6 +30,31 @@ def check_inputs(input, policy):
         if 'field' not in input: input['field']=''
         if 'link_to_webpage' not in input: input['link_to_webpage']=''
     
+    if policy == 'api_login':
+        if 'email' not in input: raise Exception("You must mention email!")
+        if 'password' not in input: raise Exception("You must mention password!")
+
+    if policy == 'api_mh_fill_timetable':
+        if 'mh_id' not in input: raise Exception("You must mention mh_id!")
+        if 'days' not in input: raise Exception("You must mention days!")
+
+    if policy == 'api_make_time_id':
+        if 'date' not in input: raise Exception("You must mention date!")
+        if 'start_time' not in input: raise Exception("You must mention start_time!")
+        if 'end_time' not in input: raise Exception("You must mention end_time!")
+
+    if policy == 'api_reserve_meeting':
+        if 'mh_id' not in input: raise Exception("You must mention mh_id!")
+        if 'user_id' not in input: raise Exception("You must mention user_id!")
+        if 'time_id' not in input: raise Exception("You must mention user_id!")
+        if 'subject' not in input: raise Exception("You must mention subject!")
+        if 'rate' not in input: input['rate'] = -1
+        if 'description' not in input: input['description'] = ""
+        if 'was_holded' not in input: input['was_holded'] = False
+
+
+
+        
     return input
 
 succes = {"is_succesfull": True, "error_string": ""}
@@ -40,6 +65,16 @@ def api_register_user(request):
     This api registers a new user and returns it's ID.
     input: first_name, last_name, user_email, user_password, student_number, mobile_number, degree, field, university, adviserID
     output: user_id, is_succesfull, error_string
+    input example: 
+    {
+        "first_name":"ali",
+        "last_name":"rezaii",
+        "user_email":"alir@gmail.com",
+        "user_password":"12345678",
+        "student_number":"0",
+        "mobile_number":"0",
+        "adviserID":5
+    }
     '''
     try:
         input = json.loads(request.body) 
@@ -89,8 +124,14 @@ def api_login(request):
     return JsonResponse(output)
 
 def api_mh_fill_timetable(request): 
+    '''
+    This api gets data's of a timetable (free times of an MH) and assigns it to an MH.
+    input: mh_id, days
+    output: role, person_id, is_succesfull, error_string
+    '''
     try:
         input = json.loads(request.body) 
+        input = check_inputs(input, 'api_mh_fill_timetable')
         mh_fill_timetable(input)
         output = succes.copy()
     except Exception as e:
@@ -98,9 +139,35 @@ def api_mh_fill_timetable(request):
 
     return JsonResponse(output)
 
-input = '''{ 
-    "mh_id":"123", 
-    "days":[{"date":"12/08/2022", "meetings":[{"start_time":"12:30", "end_time"="13:30"}, {"start_time":"17:30", "end_time"="18:30"}]}
-           ,{"date":"12/09/2022", "meetings":[{"start_time":"14:30", "end_time"="15:30"}]}
-          ]}
-        '''
+def api_make_time_id(request):
+    '''
+    This api gets information of a time and makes time_id
+    input: date, start_time, end_time
+    output: is_succesfull, error_string
+    '''
+    try:
+        input = json.loads(request.body) 
+        input = check_inputs(input, 'api_make_time_id')
+        output = make_time_id(input)
+        output.update(succes)
+    except Exception as e:
+        output = {"is_succesfull": False, "error_string": str(e)}
+
+    return JsonResponse(output)
+    
+def api_reserve_meeting(request):
+    '''
+    This api gets an mh_id and user_id and sets a meeting between them.
+    input: mh_id, user_id, time_id, subject, rate, description, was_holded
+    output: is_succesfull, error_string
+    '''
+    try:
+        input = json.loads(request.body) 
+        input = check_inputs(input, 'api_reserve_meeting')
+        reserve_meeting(input)
+        output = succes.copy()
+    except Exception as e:
+        output = {"is_succesfull": False, "error_string": str(e)}
+
+    return JsonResponse(output)
+    

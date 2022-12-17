@@ -25,11 +25,12 @@ def add_mh(first_name, last_name, MH_email, MH_password, teacher_number, degree,
 
 
 
-def remove_mh_day_meetings(mh_id, date):  # remove * from meetings where mh_id={} and date={}
-    time = Time.objects.filter(date=datetime.date(date['year'], date['month'], date['day'])).values('id')
+def remove_mh_times(mh_id, date):  # remove * from meetings where mh_id={} and date={}
+    times = Time.objects.filter(date=datetime.date(date['year'], date['month'], date['day'])).values('id')
     try :
-        records = Meeting.objects.get(MHID_id = mh_id , timeID_id= time)
-        records.delete()
+        for time in times:
+            record = MH_Time.objects.get(MHID_id = mh_id , timeID_id= time['id'])
+            record.delete()
         print("Records deleted successfully!")
     except Exception as e:
         print("Records doesn't exist : ", str(e))
@@ -39,6 +40,11 @@ def remove_mh_day_meetings(mh_id, date):  # remove * from meetings where mh_id={
 def append_time(date, start_time, end_time):  # append a time and return its id
     # date(year = 0, month = 0, day = 0)
     # time(hour = 0, minute = 0, second = 0)
+    queryset = Time.objects.filter(date= datetime.date(date['year'], date['month'], date['day']),
+             start_time= datetime.time(start_time['hour'], start_time['minute'], start_time['second']),
+             end_time= datetime.time(end_time['hour'], end_time['minute'], end_time['second']))
+    if queryset.count()>0:
+        return queryset.values('id')[0]['id']
     time = Time(date= datetime.date(date['year'], date['month'], date['day']),
              start_time= datetime.time(start_time['hour'], start_time['minute'], start_time['second']),
              end_time= datetime.time(end_time['hour'], end_time['minute'], end_time['second']))

@@ -5,7 +5,7 @@ from api.orm_functions import get_role, add_mh
 # Used in: login                                 
 from api.orm_functions import get_role, check_password, get_user_id   
 # Used in: mh_fill_timetable
-from api.orm_functions import remove_mh_day_meetings, append_time, append_mh_time
+from api.orm_functions import remove_mh_times, append_time, append_mh_time
 
 
 def register_user(input):
@@ -42,8 +42,14 @@ def login(input):
 def mh_fill_timetable(input):
     mh_id, days = input['mh_id'], input['days']
     for day in days:
-        remove_mh_day_meetings(mh_id, day['date']) 
+        remove_mh_times(mh_id, day['date']) 
         for mh_time in day['meetings']:
             time_id = append_time(day['date'], mh_time['start_time'], mh_time['end_time'])
             append_mh_time(mh_id, time_id)
 
+def make_time_id(input):
+    time_id = append_time(input['date'], input['start_time'], input['end_time'])
+    return {"time_id":time_id}
+
+def reserve_meeting(input):
+    pass
