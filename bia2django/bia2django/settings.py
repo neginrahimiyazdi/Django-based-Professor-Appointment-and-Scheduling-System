@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'bia2django.wsgi.application'
 DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.postgresql',
-'NAME': 'testdb',
+'NAME': 'database2',
 'USER': 'root',
 'PASSWORD': 'k6TCXdUCWrXjRyy451fnVWTt',
 'HOST': 'may.iran.liara.ir',
