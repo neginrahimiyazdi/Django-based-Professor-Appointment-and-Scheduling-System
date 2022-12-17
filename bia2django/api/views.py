@@ -98,3 +98,9 @@ def api_mh_fill_timetable(request):
 
     return JsonResponse(output)
 
+input = '''{ 
+    "mh_id":"123", 
+    "days":[{"date":"12/08/2022", "meetings":[{"start_time":"12:30", "end_time"="13:30"}, {"start_time":"17:30", "end_time"="18:30"}]}
+           ,{"date":"12/09/2022", "meetings":[{"start_time":"14:30", "end_time"="15:30"}]}
+          ]}
+        '''

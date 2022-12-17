@@ -1,32 +1,32 @@
-from api.orm_functions import add_user, add_mh
-from api.orm_functions import get_role, check_password, get_user_id
+# Used in: register_user
+from api.orm_functions import get_role, add_user    
+# Used in: register_mh                             
+from api.orm_functions import get_role, add_mh  
+# Used in: login                                 
+from api.orm_functions import get_role, check_password, get_user_id   
+# Used in: mh_fill_timetable
 from api.orm_functions import remove_mh_day_meetings, append_time, append_mh_time
 
-import json
-
-input = '''{ 
-    "mh_id":"123", 
-    "days":[{"date":"12/08/2022", "meetings":[{"start_time":"12:30", "end_time"="13:30"}, {"start_time":"17:30", "end_time"="18:30"}]}
-           ,{"date":"12/09/2022", "meetings":[{"start_time":"14:30", "end_time"="15:30"}]}
-          ]}
-        '''
 
 def register_user(input):
+    if get_role(input['user_email']) != None:
+        raise Exception('Email already exists!')
     user_id = add_user(input['first_name'], input['last_name'], 
-                   input['user_email'], input['user_password'], 
-                   input['student_number'], input['mobile_number'],  
-                   input['degree'], input['field'], 
-                   input['university'], input['adviserID'])
+                       input['user_email'], input['user_password'], 
+                       input['student_number'], input['mobile_number'],  
+                       input['degree'], input['field'], 
+                       input['university'], input['adviserID'])
     output = {"user_id": user_id}
     return output
 
 def register_mh(input):
-    user_id = add_user(input['first_name '], input['last_name'], 
-                     input['user_email'], input['user_password'], 
-                     input['student_number'], input['mobile_number'], 
-                     input['degree'], input['field'], 
-                     input['university'], input['adviserID'])
-    output = {"user_id": user_id}
+    if get_role(input['MH_email']) != None:
+        raise Exception('Email already exists!')
+    user_id = add_mh(input['first_name'], input['last_name'], 
+                     input['MH_email'], input['MH_password'], 
+                     input['teacher_number'], input['degree'], 
+                     input['field'], input['link_to_webpage'])
+    output = {"mh_id": user_id}
     return output
 
 def login(input):

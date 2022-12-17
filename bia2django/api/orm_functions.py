@@ -20,9 +20,7 @@ def add_mh(first_name, last_name, MH_email, MH_password, teacher_number, degree,
             MH_email=MH_email, MH_password=MH_password, 
             teacher_number=teacher_number, degree=degree, 
             field=field, link_to_webpage=link_to_webpage)
-    print([first_name, last_name, MH_email, MH_password, teacher_number, degree, field, link_to_webpage]) 
     mh.save()  
-    
     return mh.id
 
 
