@@ -163,3 +163,27 @@ def get_mh_times(mh_id, date):
             mh_times.append({ "start_time": {"hour":start_time.hour, "minute":start_time.minute, "second":start_time.second},
                                 "end_time": {"hour":end_time.hour, "minute":end_time.minute, "second":end_time.second}})
     return mh_times
+
+
+
+
+def mh_meetings(mh_id, date, order): 
+    if type(date) is not datetime.date: date = datetime.date(date['year'], date['month'], date['day'])
+    output = []
+    times = Time.objects.filter().values('id', 'date', 'start_time', 'end_time')
+    for time in times:
+        if (order=='past' and time['date']<date) or (order=='present' and time['date']==date) or (order=='future' and time['date']>date):
+            meets = Meeting.objects.filter(MHID_id= mh_id, timeID_id= time['id']).values('id', 'MHID')
+            for meet in meets:
+                mh = MH.objects.filter(id= meet['MHID']).values('first_name', 'last_name')[0]
+                output.append({'meeting_id':meet['id'], 
+                               'mh_first_name':mh['first_name'],
+                               'mh_last_name':mh['last_name'],
+                               'date':time['date'],
+                               'start_time':time['start_time'],
+                               'end_time':time['end_time']})
+    return output
+
+
+
+

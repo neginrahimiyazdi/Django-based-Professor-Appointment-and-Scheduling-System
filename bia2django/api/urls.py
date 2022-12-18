@@ -9,6 +9,7 @@ urlpatterns = {
     path('mh_fill_timetable/', views.api_mh_fill_timetable),
     path('get_list_of_mh/', views.api_get_list_of_mh),
     path('reserve_meeting/', views.api_reserve_meeting),
-    path('get_timetaible/', views.api_get_timetaible)
+    path('get_timetaible/', views.api_get_timetaible),
+    path('mh_timeline/', views.api_mh_timeline)
     
 }

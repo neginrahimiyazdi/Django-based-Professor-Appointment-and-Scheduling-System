@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from api.main_functions import register_user, register_mh, mh_fill_timetable, login, reserve_meeting, get_list_of_mh, get_timetaible
+from api.main_functions import mh_timeline
+
 import json
 
 
@@ -100,7 +102,6 @@ def api_register_user(request):
 
     return JsonResponse(output)
 
-
 def api_register_mh(request): 
     '''
     This api registers a new MH and returns it's ID.
@@ -134,7 +135,6 @@ def api_register_mh(request):
         output = {"is_succesfull": False, "error_string": str(e),}
 
     return JsonResponse(output)
-
 
 def api_login(request): 
     '''
@@ -247,7 +247,7 @@ def api_get_list_of_mh(request):
 def api_reserve_meeting(request):
     '''
     This api gets an mh_id and user_id and sets a meeting between them.
-    input: mh_id, user_id, time_id, subject, rate, description, was_holded
+    input: mh_id, user_id, date, start_time, end_time, subject, rate, description, was_holded
     output: is_succesfull, error_string
     api url: [host_addres]/api/reserve_meeting/
     input example: 
@@ -282,7 +282,7 @@ def api_get_timetaible(request):
     '''
     This api gets an mh_id and a date and returns timetable of whole week that includes the day.
     input: mh_id, date
-    output: is_succesfull, error_string
+    output: mh_id, days
     api url: [host_addres]/api/get_timetaible/
     input example: 
     {
@@ -291,59 +291,98 @@ def api_get_timetaible(request):
     }
     output example:
     {
-    "mh_id": 1,
-    "days": [
-        {
-            "date": {"year": 2022, "month": 12, "day": 3},
-            "meetings": []
-        },
-        {
-            "date": {"year": 2022, "month": 12, "day": 4},
-            "meetings": []
-        },
-        {
-            "date": {"year": 2022, "month": 12, "day": 5},
-            "meetings": []
-        },
-        {
-            "date": {"year": 2022, "month": 12, "day": 6},
-            "meetings": []
-        },
-        {
-            "date": {"year": 2022, "month": 12, "day": 7},
-            "meetings": []
-        },
-        {
-            "date": {"year": 2022, "month": 12, "day": 8},
-            "meetings": [
-                {
-                    "start_time": {"hour": 13, "minute": 15, "second": 0},
-                    "end_time": {"hour": 13, "minute": 30, "second": 0}
-                },
-                {
-                    "start_time": {"hour": 12, "minute": 30, "second": 0},
-                    "end_time": {"hour": 12, "minute": 45, "second": 0}
-                }
-            ]
-        },
-        {
-            "date": {"year": 2022, "month": 12, "day": 9},
-            "meetings": [
-                {
-                    "start_time": {"hour": 14, "minute": 30, "second": 0},
-                    "end_time": {"hour": 15, "minute": 30, "second": 0}
-                }
-            ]
-        }
-    ],
-    "is_succesfull": true,
-    "error_string": ""
-}
+        "mh_id": 1,
+        "days": [
+            {
+                "date": {"year": 2022, "month": 12, "day": 3},
+                "meetings": []
+            },
+            {
+                "date": {"year": 2022, "month": 12, "day": 4},
+                "meetings": []
+            },
+            {
+                "date": {"year": 2022, "month": 12, "day": 5},
+                "meetings": []
+            },
+            {
+                "date": {"year": 2022, "month": 12, "day": 6},
+                "meetings": []
+            },
+            {
+                "date": {"year": 2022, "month": 12, "day": 7},
+                "meetings": []
+            },
+            {
+                "date": {"year": 2022, "month": 12, "day": 8},
+                "meetings": [
+                    {
+                        "start_time": {"hour": 13, "minute": 15, "second": 0},
+                        "end_time": {"hour": 13, "minute": 30, "second": 0}
+                    },
+                    {
+                        "start_time": {"hour": 12, "minute": 30, "second": 0},
+                        "end_time": {"hour": 12, "minute": 45, "second": 0}
+                    }
+                ]
+            },
+            {
+                "date": {"year": 2022, "month": 12, "day": 9},
+                "meetings": [
+                    {
+                        "start_time": {"hour": 14, "minute": 30, "second": 0},
+                        "end_time": {"hour": 15, "minute": 30, "second": 0}
+                    }
+                ]
+            }
+        ],
+        "is_succesfull": true,
+        "error_string": ""
+    }
     '''
     try:
         input = json.loads(request.body) 
         input = check_inputs(input, 'api_get_timetaible')
         output = get_timetaible(input)
+        output.update(succes)
+    except Exception as e:
+        output = {"is_succesfull": False, "error_string": str(e)}
+
+    return JsonResponse(output)
+
+def api_mh_timeline(request):
+    '''
+    This api gets an mh_id and a date (today date) and returns the meetings that the person has.
+    input: mh_id, date
+    output: past_meetings, present_meetings, future_meetings, is_succesfull, error_string
+    api url: [host_addres]/api/mh_timeline/
+    input example: 
+    {
+        "mh_id": 1,
+        "date": {"year":2022, "month":12, "day":9}
+    }
+    output example:
+    {
+        "past_meetings": [
+            {
+                "meeting_id": 1,
+                "mh_first_name": "John",
+                "mh_last_name": "Nash",
+                "date": "2022-12-08",
+                "start_time": "12:45:00",
+                "end_time": "13:15:00"
+            }
+        ],
+        "present_meetings": [],
+        "future_meetings": [],
+        "is_succesfull": true,
+        "error_string": ""
+    }
+    '''
+    try:
+        input = json.loads(request.body) 
+        input = check_inputs(input, 'api_mh_timeline')
+        output = mh_timeline(input)
         output.update(succes)
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}

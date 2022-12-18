@@ -10,8 +10,10 @@ from api.orm_functions import remove_mh_times, append_time, append_mh_time
 from api.orm_functions import get_mh_list
 # Used in: reserve_meeting
 from api.orm_functions import append_time, remove_time_from_mh_times, append_meeting
-
+# Used in: get_timetaible
 from api.orm_functions import get_mh_times
+# Used in: 
+from api.orm_functions import mh_meetings
 
 import datetime
 
@@ -78,3 +80,10 @@ def get_timetaible(input):
         output['days'].append(day)
     return output
         
+def mh_timeline(input):
+    output = {
+        'past_meetings':mh_meetings(input['mh_id'], input['date'], 'past'),
+        'present_meetings':mh_meetings(input['mh_id'], input['date'], 'present'),
+        'future_meetings':mh_meetings(input['mh_id'], input['date'], 'future'),
+    }
+    return output
