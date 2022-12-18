@@ -15,8 +15,8 @@ class Time(models.Model):
 class MH(models.Model):
     first_name = models.CharField(max_length= 100)
     last_name = models.CharField(max_length= 100)
-    MH_email = models.EmailField(max_length=100)
-    MH_password = models.CharField(max_length=100)
+    mh_email = models.EmailField(max_length=100)
+    mh_password = models.CharField(max_length=100)
     teacher_number = models.CharField(max_length=50)
     degree = models.CharField(max_length= 100)
     field = models.CharField(max_length= 100)
@@ -46,7 +46,7 @@ class Meeting(models.Model):
     rate = models.IntegerField(default=None)
     description = models.TextField(default=None)
     was_holded = models.BooleanField(default=None)
-    MHID = models.ForeignKey(MH, on_delete=models.CASCADE)
+    mhID = models.ForeignKey(MH, on_delete=models.CASCADE)
     userID  = models.ForeignKey(User, on_delete=models.CASCADE)
     timeID  = models.ForeignKey(Time, on_delete=models.CASCADE)
 
@@ -54,7 +54,7 @@ class Meeting(models.Model):
         return "%s" % (self.meeting_id)
 
 class MH_Time(models.Model) :
-    MHID = models.ForeignKey(MH, on_delete=models.CASCADE)
+    mhID = models.ForeignKey(MH, on_delete=models.CASCADE)
     timeID = models.ForeignKey(Time, on_delete=models.CASCADE)
 
     def __str__(self):

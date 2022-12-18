@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'bia2django.wsgi.application'
 DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.postgresql',
-'NAME': 'database2',
+'NAME': 'database3',
 'USER': 'root',
 'PASSWORD': 'OjjBj61RtBSQpvmqPuMl1TT2',
 'HOST': 'may.iran.liara.ir',
