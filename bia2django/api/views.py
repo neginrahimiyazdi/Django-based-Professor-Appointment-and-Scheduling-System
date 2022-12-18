@@ -110,13 +110,14 @@ def api_register_mh(request):
     api url: [host_addres]/api/register_mh/
     input example: 
     {
-        "first_name":"ali",
-        "last_name":"rezaii",
-        "user_email":"alir@gmail.com",
-        "user_password":"12345678",
-        "student_number":"0",
-        "mobile_number":"0",
-        "adviserID":5
+        "first_name": "Luke",
+        "last_name": "Bryan",
+        "MH_email": "LukeB@gmaiil.com",
+        "MH_password": "87654321",
+        "teacher_number": "0",
+        "degree": "Full Teacher",
+        "field": "Country",
+        "link_to_webpage": ""
     }
     output example:
     {
@@ -366,8 +367,8 @@ def api_mh_timeline(request):
         "past_meetings": [
             {
                 "meeting_id": 1,
-                "mh_first_name": "John",
-                "mh_last_name": "Nash",
+                "user_first_name": "John",
+                "user_last_name": "Nash",
                 "date": "2022-12-08",
                 "start_time": "12:45:00",
                 "end_time": "13:15:00"

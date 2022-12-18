@@ -175,10 +175,10 @@ def mh_meetings(mh_id, date, order):
         if (order=='past' and time['date']<date) or (order=='present' and time['date']==date) or (order=='future' and time['date']>date):
             meets = Meeting.objects.filter(MHID_id= mh_id, timeID_id= time['id']).values('id', 'MHID')
             for meet in meets:
-                mh = MH.objects.filter(id= meet['MHID']).values('first_name', 'last_name')[0]
+                user = User.objects.filter(id= meet['userID']).values('first_name', 'last_name')[0]
                 output.append({'meeting_id':meet['id'], 
-                               'mh_first_name':mh['first_name'],
-                               'mh_last_name':mh['last_name'],
+                               'mh_first_name':user['first_name'],
+                               'mh_last_name':user['last_name'],
                                'date':time['date'],
                                'start_time':time['start_time'],
                                'end_time':time['end_time']})
