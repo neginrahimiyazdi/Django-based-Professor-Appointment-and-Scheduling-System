@@ -133,8 +133,10 @@ def remove_time_from_mh_times(mh_id, date, start_time, end_time):
     start_time = datetime.time(hour=start_time['hour'], minute=start_time['minute'], second=start_time['second'])
     end_time = datetime.time(hour=end_time['hour'], minute=end_time['minute'], second=end_time['second'])
     queryset = MH_Time.objects.filter(MHID_id=mh_id).values('timeID')
+    print(queryset)
     for timeID in queryset:
         time = Time.objects.filter(id=timeID['timeID']).values("start_time", "end_time", "date")[0]
+        
         if time["date"] != date:
             continue
         if start_time >= time["start_time"] and end_time <= time["end_time"]:
