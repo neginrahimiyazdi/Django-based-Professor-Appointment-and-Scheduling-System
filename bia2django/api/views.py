@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
-from api.main_functions import register_user, register_mh, mh_fill_timetable, login, make_time_id, reserve_meeting
+from api.main_functions import register_user, register_mh, mh_fill_timetable, login, reserve_meeting, get_list_of_mh, get_timetaible
 import json
 
 
@@ -46,14 +46,17 @@ def check_inputs(input, policy):
     if policy == 'api_reserve_meeting':
         if 'mh_id' not in input: raise Exception("You must mention mh_id!")
         if 'user_id' not in input: raise Exception("You must mention user_id!")
-        if 'time_id' not in input: raise Exception("You must mention user_id!")
+        if 'date' not in input: raise Exception("You must mention date!")
+        if 'start_time' not in input: raise Exception("You must mention start_time!")
+        if 'end_time' not in input: raise Exception("You must mention end_time!")
         if 'subject' not in input: raise Exception("You must mention subject!")
         if 'rate' not in input: input['rate'] = -1
         if 'description' not in input: input['description'] = ""
         if 'was_holded' not in input: input['was_holded'] = False
 
-
-
+    if policy == 'api_get_timetaible':
+        if 'mh_id' not in input: raise Exception("You must mention mh_id!")
+        if 'date' not in input: raise Exception("You must mention date!")
         
     return input
 
@@ -139,22 +142,20 @@ def api_mh_fill_timetable(request):
 
     return JsonResponse(output)
 
-def api_make_time_id(request):
+def api_get_list_of_mh(request):
     '''
-    This api gets information of a time and makes time_id
-    input: date, start_time, end_time
-    output: is_succesfull, error_string
+    This api returns list of all mh's
+    input: _
+    output: mh_list, is_succesfull, error_string
     '''
     try:
-        input = json.loads(request.body) 
-        input = check_inputs(input, 'api_make_time_id')
-        output = make_time_id(input)
+        output = get_list_of_mh()
         output.update(succes)
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
     return JsonResponse(output)
-    
+
 def api_reserve_meeting(request):
     '''
     This api gets an mh_id and user_id and sets a meeting between them.
@@ -171,3 +172,18 @@ def api_reserve_meeting(request):
 
     return JsonResponse(output)
     
+def api_get_timetaible(request):
+    '''
+    This api gets an mh_id and a date and returns timetable of whole week that includes the day.
+    input: mh_id, date
+    output: is_succesfull, error_string
+    '''
+    try:
+        input = json.loads(request.body) 
+        input = check_inputs(input, 'api_get_timetaible')
+        output = get_timetaible(input)
+        output.update(succes)
+    except Exception as e:
+        output = {"is_succesfull": False, "error_string": str(e)}
+
+    return JsonResponse(output)

@@ -27,27 +27,21 @@ def add_mh(first_name, last_name, MH_email, MH_password, teacher_number, degree,
 
 def remove_mh_times(mh_id, date):  # remove * from meetings where mh_id={} and date={}
     times = Time.objects.filter(date=datetime.date(date['year'], date['month'], date['day'])).values('id')
-    try :
-        for time in times:
-            record = MH_Time.objects.get(MHID_id = mh_id , timeID_id= time['id'])
-            record.delete()
-        print("Records deleted successfully!")
-    except Exception as e:
-        print("Records doesn't exist : ", str(e))
-    pass  # zahra side
+    for time in times:
+        record = MH_Time.objects.filter(MHID_id = mh_id , timeID_id= time['id'])
+        if record.count()>0: record.delete()
 
 
 def append_time(date, start_time, end_time):  # append a time and return its id
     # date(year = 0, month = 0, day = 0)
     # time(hour = 0, minute = 0, second = 0)
-    queryset = Time.objects.filter(date= datetime.date(date['year'], date['month'], date['day']),
-             start_time= datetime.time(start_time['hour'], start_time['minute'], start_time['second']),
-             end_time= datetime.time(end_time['hour'], end_time['minute'], end_time['second']))
-    if queryset.count()>0:
-        return queryset.values('id')[0]['id']
-    time = Time(date= datetime.date(date['year'], date['month'], date['day']),
-             start_time= datetime.time(start_time['hour'], start_time['minute'], start_time['second']),
-             end_time= datetime.time(end_time['hour'], end_time['minute'], end_time['second']))
+    if type(date) is not datetime.date: date = datetime.date(date['year'], date['month'], date['day'])
+    if type(start_time) is not datetime.time: start_time= datetime.time(start_time['hour'], start_time['minute'], start_time['second'])
+    if type(end_time) is not datetime.time: end_time= datetime.time(end_time['hour'], end_time['minute'], end_time['second'])
+    
+    queryset = Time.objects.filter(date=date,start_time=start_time,end_time=end_time)
+    if queryset.count()>0: return queryset.values('id')[0]['id']
+    time = Time(date=date,start_time=start_time,end_time=end_time)
     time.save()
     return time.id
     # zahra side
@@ -125,20 +119,45 @@ def remove_mh_available_time(mh_id, date, start_time, end_time):
     return queryset_2
     # zahra side
 
-def append_meeting(mh_id, date, start_time, end_time, user_id, subject, description): #reserve meeting
-    queryset_1 = Time.objects.filter(date=datetime.date(date['year'], date['month'], date['day']), 
-                start_time=datetime.time(start_time['hour'],start_time['minute'], start_time['second']), 
-                end_time=datetime.time(end_time['hour'],end_time['minute'], end_time['second'])).values('time_id')
-    m = Meeting(subject= subject, description= description, MH_id= mh_id, user_id= user_id, time_id= queryset_1)
+def append_meeting(mh_id, time_id, user_id, subject,rate, was_holded, description): #reserve meeting
+    m = Meeting(subject= subject, rate=rate, was_holded=was_holded,description= description, MHID_id= mh_id, userID_id= user_id, timeID_id= time_id)
     m.save()
-    pass  # zahra side
+    return m.id  # zahra side
+
+def get_mh_list():
+    return list(MH.objects.values('id', 'first_name', 'last_name', 'MH_email', 'degree', 'field', 'link_to_webpage'))
 
 
+def remove_time_from_mh_times(mh_id, date, start_time, end_time):
+    date = datetime.date(year=date["year"], month=date["month"], day=date["day"])
+    start_time = datetime.time(hour=start_time['hour'], minute=start_time['minute'], second=start_time['second'])
+    end_time = datetime.time(hour=end_time['hour'], minute=end_time['minute'], second=end_time['second'])
+    queryset = MH_Time.objects.filter(MHID_id=mh_id).values('timeID')
+    for timeID in queryset:
+        time = Time.objects.filter(id=timeID['timeID']).values("start_time", "end_time", "date")[0]
+        if time["date"] != date:
+            continue
+        if start_time >= time["start_time"] and end_time <= time["end_time"]:
+            if end_time != time["end_time"]:
+                time_id = append_time(date, end_time, time["end_time"])
+                append_mh_time(mh_id, time_id)
+            if time["start_time"] != start_time:
+                time_id = append_time(date, time["start_time"], start_time)
+                append_mh_time(mh_id, time_id)
+            record = MH_Time.objects.filter(MHID_id=mh_id, timeID_id=timeID['timeID'])
+            record.delete()
+            return
+    raise Exception("MH is not available in this time!")
 
 
-
-
-
-
-
-
+def get_mh_times(mh_id, date):
+    mh_times = []
+    times = Time.objects.filter(date=date).values('id', 'date', 'start_time', 'end_time')
+    for time in times:
+        record = MH_Time.objects.filter(MHID_id = mh_id , timeID_id= time['id'])
+        if record.count()>0:
+            
+            start_time, end_time = time['start_time'], time['end_time']
+            mh_times.append({ "start_time": {"hour":start_time.hour, "minute":start_time.minute, "second":start_time.second},
+                                "end_time": {"hour":end_time.hour, "minute":end_time.minute, "second":end_time.second}})
+    return mh_times

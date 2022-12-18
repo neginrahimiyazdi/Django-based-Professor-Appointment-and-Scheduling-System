@@ -6,7 +6,14 @@ from api.orm_functions import get_role, add_mh
 from api.orm_functions import get_role, check_password, get_user_id   
 # Used in: mh_fill_timetable
 from api.orm_functions import remove_mh_times, append_time, append_mh_time
+# Used in: get_list_of_mh
+from api.orm_functions import get_mh_list
+# Used in: reserve_meeting
+from api.orm_functions import append_time, remove_time_from_mh_times, append_meeting
 
+from api.orm_functions import get_mh_times
+
+import datetime
 
 def register_user(input):
     if get_role(input['user_email']) != None:
@@ -47,9 +54,27 @@ def mh_fill_timetable(input):
             time_id = append_time(day['date'], mh_time['start_time'], mh_time['end_time'])
             append_mh_time(mh_id, time_id)
 
-def make_time_id(input):
-    time_id = append_time(input['date'], input['start_time'], input['end_time'])
-    return {"time_id":time_id}
-
+def get_list_of_mh():
+    mh_list = get_mh_list()
+    return {"mh_list":mh_list}
+    
 def reserve_meeting(input):
-    pass
+    time_id = append_time(input["date"], input["start_time"], input["end_time"])
+    remove_time_from_mh_times(input["mh_id"], input["date"], input["start_time"], input["end_time"])
+    meeting_id = append_meeting(input["mh_id"],  time_id,
+                                input["user_id"], input["subject"], 
+                                input["rate"], input["was_holded"],
+                                input["description"])
+    return meeting_id
+
+def get_timetaible(input):
+    output = {'mh_id':input['mh_id'], 'days':[]}
+    date = datetime.date(input['date']['year'], input['date']['month'], input['date']['day'])
+    saturday_date = date + datetime.timedelta(-((date.weekday()+2)%7))
+    for i in range(7):
+        i_day = saturday_date + datetime.timedelta(i)
+        day = {'date':{"year":i_day.year, "month":i_day.month, "day":i_day.day},
+               'meetings': get_mh_times(input['mh_id'], i_day)}
+        output['days'].append(day)
+    return output
+        
