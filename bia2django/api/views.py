@@ -8,6 +8,9 @@ from api.main_functions import get_mh_timeline, get_user_timeline
 from api.main_functions import get_mh_account, get_user_account
 from api.main_functions import fill_mh_account, fill_user_account
 from api.orm_functions import authenticate_person
+
+from django.views.decorators.csrf import csrf_exempt
+
 import json
 
 
@@ -84,6 +87,7 @@ succes = {"is_succesfull": True, "error_string": ""}
 # API's list
 
 
+@csrf_exempt 
 def api_register_mh(request): 
     '''
     This api registers a new mh and returns it's ID.
@@ -120,6 +124,7 @@ def api_register_mh(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_register_user(request): 
     '''
     This api registers a new user and returns it's ID.
@@ -158,6 +163,7 @@ def api_register_user(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_login(request): 
     '''
     This api logins a user and returns it's ID (if logined).
@@ -189,6 +195,7 @@ def api_login(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_mh_fill_timetable(request): 
     '''
     This api gets data's of a timetable (free times of an mh) and assigns it to an mh.
@@ -238,6 +245,7 @@ def api_mh_fill_timetable(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_get_list_of_mh(request):
     '''
     This api returns list of all mh's
@@ -271,6 +279,7 @@ def api_get_list_of_mh(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_reserve_meeting(request):
     '''
     This api gets an mh_id and user_id and sets a meeting between them.
@@ -307,7 +316,8 @@ def api_reserve_meeting(request):
         output = {"is_succesfull": False, "error_string": str(e)}
 
     return JsonResponse(output)
-    
+
+@csrf_exempt  
 def api_get_timetable(request):
     '''
     This api gets an mh_id and a date and returns timetable of whole week that includes the day.
@@ -381,6 +391,7 @@ def api_get_timetable(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_get_mh_timeline(request):
     '''
     This api gets an mh_id and a date (today date) and returns the meetings that the person has.
@@ -423,6 +434,7 @@ def api_get_mh_timeline(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_get_user_timeline(request):
     '''
     This api gets an user_id and a date (today date) and returns the meetings that the person has.
@@ -465,6 +477,7 @@ def api_get_user_timeline(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_get_mh_account(request):
     '''
     This api gets an mh_id and returns information of the user.
@@ -502,6 +515,7 @@ def api_get_mh_account(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_get_user_account(request):
     '''
     This api gets an mh_id and returns information of the user.
@@ -541,11 +555,7 @@ def api_get_user_account(request):
 
     return JsonResponse(output)
 
-
-
-
-
-
+@csrf_exempt 
 def api_fill_mh_account(request):
     '''
     This api gets an mh_id and information of the mh and updates it.
@@ -554,9 +564,24 @@ def api_fill_mh_account(request):
     api url: [host_address]/api/fill_mh_account/
     access level: only the meeting holder - you need to provide the mh_password that is assigned to the mh
     input example: 
-
+    {
+        "mh_id":1,
+        "first_name": "John",
+        "last_name": "Nash",
+        "mh_email": "JohnN@gmaiil.com",
+        "mh_password": "87654321",
+        "teacher_number": "0",
+        "degree": "Full Teacher",
+        "field": "Math",
+        "link_to_webpage": "",
+        "is_succesfull": true,
+        "error_string": ""
+    }
     output example:
-
+    {
+        "is_succesfull": true,
+        "error_string": ""
+    }
     '''
     try:
         input = json.loads(request.body) 
@@ -569,6 +594,7 @@ def api_fill_mh_account(request):
 
     return JsonResponse(output)
 
+@csrf_exempt 
 def api_fill_user_account(request):
     '''
     This api gets an user_id and information of the mh and updates it.

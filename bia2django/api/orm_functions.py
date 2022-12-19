@@ -90,7 +90,7 @@ def check_password(email, role, password):    #if user password was wrong return
 
 def get_user_id(email, role):
     if role=='user': queryset = User.objects.filter(user_email= email).values('id')[0]['id']
-    elif role=='mh': queryset = mh.objects.filter(mh_email= email).values('id')[0]['id']
+    elif role=='mh': queryset = MH.objects.filter(mh_email= email).values('id')[0]['id']
     return queryset
 
 
@@ -223,5 +223,5 @@ def set_account(person_id, role, input):
         user.user_email, user.user_password = input['user_email'], input['user_password']
         user.student_number, user.mobile_number = input['student_number'], input['mobile_number']
         user.degree, user.field = input['degree'], input['field']
-        user.university, user.adviserID = input['university'], input['adviserID']
-        mh.save()
+        user.university = input['university']
+        user.save()
