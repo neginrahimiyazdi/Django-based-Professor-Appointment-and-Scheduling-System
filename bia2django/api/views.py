@@ -31,7 +31,9 @@ def check_inputs(input, policy):
     
     if policy == 'api_register_mh':
         if 'first_name' not in input: raise Exception("You must mention first name!")
+        elif len(input['first_name'])<3: raise Exception("Lenght of first name must be at least 3!")
         if 'last_name' not in input: raise Exception("You must mention last name!")
+        elif len(input['last_name'])<3: raise Exception("Lenght of last name must be at least 3!")
         if 'mh_email' not in input: raise Exception("You must mention email!")
         if 'mh_password' not in input: raise Exception("You must mention password!")
         elif len(input['mh_password'])<8: raise Exception("Lenght of password must be at least 8!")
