@@ -81,7 +81,31 @@ def check_inputs(input, policy):
     if policy == "get_user_account":
         if 'user_id' not in input: raise Exception("You must mention user_id!")
     
+    if policy == "fill_mh_account":
+        if "mh_id" not in input: raise Exception("You must mention mh_id!")
+        if "mh_password" not in input: raise Exception("You must mention mh_password!")
+        if "first_name" not in input: raise Exception("You must mention first_name!")
+        if "last_name" not in input: raise Exception("You must mention last_name!")
+        if "mh_email" not in input: raise Exception("You must mention mh_email!")
+        if "mh_password_new" not in input: raise Exception("You must mention mh_password_new!")
+        if "teacher_number" not in input: raise Exception("You must mention teacher_number!")
+        if "degree" not in input: raise Exception("You must mention degree!")
+        if "field" not in input: raise Exception("You must mention field!")
+        if "link_to_webpage" not in input: raise Exception("You must mention link_to_webpage!")
+        if "is_succesfull" not in input: raise Exception("You must mention is_succesfull!")
 
+    if policy == "fill_user_account":
+        if "mh_id" not in input: raise Exception("You must mention mh_id!")
+        if "user_password" not in input: raise Exception("You must mention user_password!")
+        if "first_name" not in input: raise Exception("You must mention first_name!")
+        if "last_name" not in input: raise Exception("You must mention last_name!")
+        if "user_email" not in input: raise Exception("You must mention user_email!")
+        if "user_password_new" not in input: raise Exception("You must mention user_password_new!")
+        if "student_number" not in input: raise Exception("You must mention student_number!")
+        if "mobile_number" not in input: raise Exception("You must mention mobile_number!")
+        if "degree" not in input: raise Exception("You must mention degree!")
+        if "field" not in input: raise Exception("You must mention field!")
+        if "university" not in input: raise Exception("You must mention university!")
 
     return input
 
