@@ -11,6 +11,7 @@ from api.orm_functions import authenticate_person
 
 from django.views.decorators.csrf import csrf_exempt
 
+import time
 import json
 
 
@@ -109,7 +110,7 @@ def check_inputs(input, policy):
 
     return input
 
-succes = {"is_succesfull": True, "error_string": ""}
+succes = {"is_succesfull": True, "error_string": "", "process_time":-1}
 # API's list
 
 
@@ -140,11 +141,12 @@ def api_register_mh(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'api_register_mh')
         output = register_mh(input)
         output.update(succes)
-
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e),}
 
@@ -179,11 +181,12 @@ def api_register_user(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'api_register_user')
         output = register_user(input)
         output.update(succes)
-
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e),}
 
@@ -211,11 +214,12 @@ def api_login(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'api_login')
         output = login(input)
         output.update(succes)
-
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e),}
 
@@ -261,11 +265,13 @@ def api_mh_fill_timetable(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'api_mh_fill_timetable')
         authenticate_person(input['mh_id'], "mh", input['mh_password'])
         mh_fill_timetable(input)
         output = succes.copy()
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
@@ -298,8 +304,10 @@ def api_get_list_of_mh(request):
     }
     '''
     try:
+        start_time = time.time()
         output = get_list_of_mh()
         output.update(succes)
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
@@ -333,11 +341,13 @@ def api_reserve_meeting(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'api_reserve_meeting')
         authenticate_person(input['user_id'], "user", input['user_password'])
         reserve_meeting(input)
         output = succes.copy()
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
@@ -408,10 +418,12 @@ def api_get_timetable(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'api_get_timetaible')
         output = get_timetable(input)
         output.update(succes)
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
@@ -450,11 +462,13 @@ def api_get_mh_timeline(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'api_get_mh_timeline')
         authenticate_person(input['mh_id'], "mh", input['mh_password'])
         output = get_mh_timeline(input)
         output.update(succes)
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
@@ -493,11 +507,13 @@ def api_get_user_timeline(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'api_get_user_timeline')
         authenticate_person(input['user_id'], "user", input['user_password'])
         output = get_user_timeline(input)
         output.update(succes)
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
@@ -531,11 +547,13 @@ def api_get_mh_account(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'get_mh_account')
         authenticate_person(input['mh_id'], "mh", input['mh_password'])
         output = get_mh_account(input)
         output.update(succes)
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
@@ -571,11 +589,13 @@ def api_get_user_account(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'get_user_account')
         authenticate_person(input['user_id'], "user", input['user_password'])
         output = get_user_account(input)
         output.update(succes)
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
@@ -611,11 +631,13 @@ def api_fill_mh_account(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'fill_mh_account')
         authenticate_person(input['mh_id'], "mh", input['mh_password'])
         fill_mh_account(input)
         output = succes.copy()
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
@@ -650,11 +672,13 @@ def api_fill_user_account(request):
     }
     '''
     try:
+        start_time = time.time()
         input = json.loads(request.body) 
         input = check_inputs(input, 'fill_user_account')
         authenticate_person(input['user_id'], "user", input['user_password'])
         fill_user_account(input)
         output = succes.copy()
+        output['process_time'] = time.time()-start_time
     except Exception as e:
         output = {"is_succesfull": False, "error_string": str(e)}
 
