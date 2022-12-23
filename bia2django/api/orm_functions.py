@@ -157,7 +157,7 @@ def mh_meetings(mh_id, date, order):
     times = Time.objects.filter().values('id', 'date', 'start_time', 'end_time')
     for time in times:
         if (order=='past' and time['date']<date) or (order=='present' and time['date']==date) or (order=='future' and time['date']>date):
-            meets = Meeting.objects.filter(mhID_id=mh_id, timeID_id=time['id']).values('id', 'userID')
+            meets = Meeting.objects.filter(mhID_id=mh_id, timeID_id=time['id']).values('id', 'userID', 'subject','rate','description' ,'was_holded')
             for meet in meets:
                 user = User.objects.filter(id=meet['userID']).values('first_name', 'last_name')[0]
                 output.append({'meeting_id':meet['id'], 
@@ -179,7 +179,7 @@ def user_meetings(user_id, date, order):
     times = Time.objects.filter().values('id', 'date', 'start_time', 'end_time')
     for time in times:
         if (order=='past' and time['date']<date) or (order=='present' and time['date']==date) or (order=='future' and time['date']>date):
-            meets = Meeting.objects.filter(userID_id=user_id, timeID_id=time['id']).values('id', 'mhID')
+            meets = Meeting.objects.filter(userID_id=user_id, timeID_id=time['id']).values('id', 'mhID', 'subject','rate','description' ,'was_holded')
             for meet in meets:
                 mh = MH.objects.filter(id=meet['mhID']).values('first_name', 'last_name')[0]
                 output.append({'meeting_id':meet['id'], 
