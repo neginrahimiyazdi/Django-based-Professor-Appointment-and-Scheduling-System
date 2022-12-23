@@ -7,7 +7,7 @@ from api.main_functions import reserve_meeting, get_list_of_mh
 from api.main_functions import get_mh_timeline, get_user_timeline
 from api.main_functions import get_mh_account, get_user_account
 from api.main_functions import fill_mh_account, fill_user_account
-from api.orm_functions import authenticate_person
+from api.controller import authenticate_person
 
 from django.views.decorators.csrf import csrf_exempt
 

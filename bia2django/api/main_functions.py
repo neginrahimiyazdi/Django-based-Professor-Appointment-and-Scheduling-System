@@ -1,25 +1,25 @@
 # Used in: register_user
-from api.orm_functions import get_role, add_user    
+from api.controller import get_role, add_user    
 # Used in: register_mh                             
-from api.orm_functions import get_role, add_mh  
+from api.controller import get_role, add_mh  
 # Used in: login                                 
-from api.orm_functions import get_role, check_password, get_user_id   
+from api.controller import get_role, check_password, get_user_id   
 # Used in: mh_fill_timetable
-from api.orm_functions import remove_mh_times, append_time, append_mh_time
+from api.controller import remove_mh_times, append_time, append_mh_time
 # Used in: get_list_of_mh
-from api.orm_functions import get_mh_list
+from api.controller import get_mh_list
 # Used in: reserve_meeting
-from api.orm_functions import append_time, remove_time_from_mh_times, append_meeting
+from api.controller import append_time, remove_time_from_mh_times, append_meeting
 # Used in: get_timetaible
-from api.orm_functions import get_mh_times
+from api.controller import get_mh_times
 # Used in: mh_timeline
-from api.orm_functions import mh_meetings
+from api.controller import mh_meetings
 # Used in: user_timeline
-from api.orm_functions import user_meetings
+from api.controller import user_meetings
 # Used in: get_mh_account and get_user_account
-from api.orm_functions import get_account
+from api.controller import get_account
 # Used in: fill_mh_account and fill_user_account
-from api.orm_functions import set_account
+from api.controller import set_account
 
 import datetime
 
