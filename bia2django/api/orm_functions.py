@@ -165,7 +165,11 @@ def mh_meetings(mh_id, date, order):
                                'user_last_name':user['last_name'],
                                'date':time['date'],
                                'start_time':time['start_time'],
-                               'end_time':time['end_time']})
+                               'end_time':time['end_time'],
+                                'subject':meet['subject'],
+                               'rate':meet['rate'],
+                               'description':meet['description'],
+                               'was_holded':meet['was_holded']})
     return output
 
 
@@ -183,7 +187,11 @@ def user_meetings(user_id, date, order):
                                'mh_last_name':mh['last_name'],
                                'date':time['date'],
                                'start_time':time['start_time'],
-                               'end_time':time['end_time']})
+                               'end_time':time['end_time'],
+                               'subject':meet['subject'],
+                               'rate':meet['rate'],
+                               'description':meet['description'],
+                               'was_holded':meet['was_holded']})
     return output
 
 
@@ -213,14 +221,14 @@ def set_account(person_id, role, input):
     if role=='mh':
         mh = MH.objects.filter(id=person_id)[0]
         mh.first_name, mh.last_name = input['first_name'], input['last_name']
-        mh.mh_email, mh.mh_password = input['mh_email'], input['mh_password']
+        mh.mh_email, mh.mh_password = input['mh_email'], input['mh_password_new']
         mh.teacher_number, mh.degree = input['teacher_number'], input['degree']
         mh.field, mh.link_to_webpage = input['field'], input['link_to_webpage']
         mh.save()
     if role=='user':
         user = User.objects.filter(id=person_id)[0]
         user.first_name, user.last_name = input['first_name'], input['last_name']
-        user.user_email, user.user_password = input['user_email'], input['user_password']
+        user.user_email, user.user_password = input['user_email'], input['user_password_new']
         user.student_number, user.mobile_number = input['student_number'], input['mobile_number']
         user.degree, user.field = input['degree'], input['field']
         user.university = input['university']

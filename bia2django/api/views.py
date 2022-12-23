@@ -81,6 +81,8 @@ def check_inputs(input, policy):
     if policy == "get_user_account":
         if 'user_id' not in input: raise Exception("You must mention user_id!")
     
+
+
     return input
 
 succes = {"is_succesfull": True, "error_string": ""}
@@ -566,10 +568,11 @@ def api_fill_mh_account(request):
     input example: 
     {
         "mh_id":1,
+        "mh_password": "87654321",
         "first_name": "John",
         "last_name": "Nash",
         "mh_email": "JohnN@gmaiil.com",
-        "mh_password": "87654321",
+        "mh_password_new": "12345678",
         "teacher_number": "0",
         "degree": "Full Teacher",
         "field": "Math",
@@ -603,9 +606,24 @@ def api_fill_user_account(request):
     api url: [host_address]/api/fill_user_account/
     access level: only the user - you need to provide the user_password that is assigned to the user
     input example: 
-
+    {
+        "user_id": 1,
+        "user_password": "87654321",
+        "first_name": "ali",
+        "last_name": "mohammadpour",
+        "user_email": "alim@gmail.com",
+        "user_password_new": "12345678",
+        "student_number": "123",
+        "mobile_number": "123456",
+        "degree": "Master",
+        "field": "math",
+        "university": "amirkabir"
+    }
     output example:
-
+    {
+        "is_succesfull": true,
+        "error_string": ""
+    }
     '''
     try:
         input = json.loads(request.body) 
@@ -617,8 +635,5 @@ def api_fill_user_account(request):
         output = {"is_succesfull": False, "error_string": str(e)}
 
     return JsonResponse(output)
-
-
-
 
 

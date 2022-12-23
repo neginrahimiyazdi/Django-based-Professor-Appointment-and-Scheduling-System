@@ -110,5 +110,6 @@ def get_user_account(input):
 
 def fill_mh_account(input):
     return set_account(input['mh_id'], 'mh', input)
+    
 def fill_user_account(input):
     return set_account(input['user_id'], 'user', input)
