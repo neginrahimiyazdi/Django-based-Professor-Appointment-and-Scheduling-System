@@ -60,7 +60,7 @@ def mh_fill_timetable(input):
         remove_mh_times(mh_id, day['date']) 
         for mh_time in day['meetings']:
             time_id = append_time(day['date'], mh_time['start_time'], mh_time['end_time'])
-            append_mh_time(mh_id, time_id)
+            append_mh_time(mh_id, time_id, mh_time['reserved'])
 
 def get_list_of_mh():
     mh_list = get_mh_list()
@@ -69,6 +69,7 @@ def get_list_of_mh():
 def reserve_meeting(input):
     time_id = append_time(input["date"], input["start_time"], input["end_time"])
     remove_time_from_mh_times(input["mh_id"], input["date"], input["start_time"], input["end_time"])
+    append_mh_time(input["mh_id"],  time_id, reserved=True)
     meeting_id = append_meeting(input["mh_id"],  time_id,
                                 input["user_id"], input["subject"], 
                                 input["rate"], input["was_holded"],

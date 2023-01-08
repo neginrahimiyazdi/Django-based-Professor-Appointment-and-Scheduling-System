@@ -70,8 +70,8 @@ def append_time(date, start_time, end_time):  # append a time and return its id
     # zahra side
 
 
-def append_mh_time(mh_id, time_id):  # append a mh_time and return its id
-    mt = MH_Time(mhID_id= mh_id, timeID_id=time_id)
+def append_mh_time(mh_id, time_id, reserved=False):  # append a mh_time and return its id
+    mt = MH_Time(mhID_id= mh_id, timeID_id=time_id, reserved=reserved)
     mt.save()
     return mt.id
     # zahra side
@@ -117,7 +117,7 @@ def remove_time_from_mh_times(mh_id, date, start_time, end_time):
     start_time = datetime.time(hour=start_time['hour'], minute=start_time['minute'], second=start_time['second'])
     end_time = datetime.time(hour=end_time['hour'], minute=end_time['minute'], second=end_time['second'])
     queryset = MH_Time.objects.filter(mhID_id=mh_id).values('timeID')
-    print(queryset)
+    
     for timeID in queryset:
         time = Time.objects.filter(id=timeID['timeID']).values("start_time", "end_time", "date")[0]
         
@@ -145,7 +145,8 @@ def get_mh_times(mh_id, date):
             
             start_time, end_time = time['start_time'], time['end_time']
             mh_times.append({ "start_time": {"hour":start_time.hour, "minute":start_time.minute, "second":start_time.second},
-                                "end_time": {"hour":end_time.hour, "minute":end_time.minute, "second":end_time.second}})
+                                "end_time": {"hour":end_time.hour, "minute":end_time.minute, "second":end_time.second},
+                                "reserved":record.values('reserved')[0]['reserved']})
     return mh_times
 
 
