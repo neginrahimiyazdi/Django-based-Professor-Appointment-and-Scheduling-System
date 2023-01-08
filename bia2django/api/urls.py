@@ -16,6 +16,4 @@ urlpatterns = {
     path('get_user_account/', views.api_get_user_account),
     path('fill_mh_account/', views.api_fill_mh_account),
     path('fill_user_account/', views.api_fill_user_account),
-    
-
 }
